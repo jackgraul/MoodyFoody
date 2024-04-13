@@ -1,1 +1,28 @@
-<p>loginpage works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Login</h2>
+    </div>
+    <div class="card-body">
+      <form #loginForm="ngForm">
+        <div class="mb-3">
+          <label for="txtEmail">Restaurant Name</label>
+          <input id="txtEmail" type="text" class="form-control" name="txtEmail" [(ngModel)]="user.email" #email="ngModel">
+
+        </div>
+
+        <div class="mb-3">
+          <label for="txtPassword">Restaurant Name</label>
+          <input id="txtPassword" type="text" class="form-control" name="txtPassword" [(ngModel)]="user.password" #password="ngModel">
+
+        </div>
+
+        <button type="button" id="btnLogin" class="btn btn-primary" (click)="btnLoginClick()">Login</button><br>
+        <button type="button" id="btnCreateAccount" class="btn btn-primary mt-1" (click)="btnCreateAccountClick()">Create Account</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      Form values: {{loginForm.value | json}}
+    </div>
+  </div>
+</div>

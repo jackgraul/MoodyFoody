@@ -1,1 +1,50 @@
-<p>addpage works!</p>
+<app-nav></app-nav>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Add a Review</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="reviewForm" (ngSubmit)="onAddClick()">
+        <div class="mb-3">
+          <label for="txtRestaurantName">Restaurant Name</label>
+          <input id="txtRestaurantName" type="text" class="form-control" formControlName="restaurantName">
+          <div *ngIf="isControlInvalid('restaurantName')">
+            {{ getErrorMessage('restaurantName') }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="txtReviewComments">Review Comments</label>
+          <textarea id="txtReviewComments" class="form-control" formControlName="reviewComments"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="txtReviewDate">Review Date</label>
+          <input id="txtReviewDate" type="date" class="form-control" formControlName="reviewDate">
+          <div *ngIf="isControlInvalid('reviewDate')">
+            {{ getErrorMessage('reviewDate') }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="txtRating">Rating</label>
+          <input id="txtRating" type="number" class="form-control" formControlName="rating">
+          <div *ngIf="isControlInvalid('rating')">
+            {{ getErrorMessage('rating') }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button type="button" id="newPicture" class="btn btn-primary" (click)="onNewPictureClick()">Take New Picture</button>
+          <button type="button" id="selectPicture" class="btn btn-secondary m-1" (click)="onSelectPictureClick()">Select Picture</button>
+        </div>
+
+        <button type="submit" id="btnAdd" class="btn btn-primary">Add Review</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      Form values: {{ reviewForm.value | json }}
+    </div>
+  </div>
+</div>
