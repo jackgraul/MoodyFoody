@@ -3,12 +3,14 @@ import {NavComponent} from "../nav/nav.component";
 import {Review} from "../../models/Review.model";
 import {ReviewDalService} from "../../services/review-dal.service";
 import {Router} from "@angular/router";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-showpage',
   standalone: true,
   imports: [
-    NavComponent
+    NavComponent,
+    NgClass
   ],
   templateUrl: './showpage.component.html',
   styleUrl: './showpage.component.css'
@@ -17,6 +19,10 @@ export class ShowpageComponent {
   reviews: Review[] = [];
   dal = inject(ReviewDalService);
   router = inject(Router);
+
+  constructor() {
+    this.showAll();
+  }
 
   showAll() {
     this.dal.selectAll().then((data) => {

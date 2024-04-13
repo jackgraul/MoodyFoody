@@ -6,25 +6,28 @@
     </div>
     <div class="card-body">
       <ul class="list-group">
-        @for (review of reviews;track $index) {
+        @for (review of reviews; track $index) {
           <li class="list-group-item">
-            <button type="button" id="btnModify" class="btn btn-primary btn-sm me-4" (click)="onModifyClick(review)">
-              Modify
-            </button>
-
-            <button type="button" id="btnDelete" class="btn btn-danger btn-sm me-4" (click)="onDeleteClick(review)">
-              Delete
-            </button>
+            <button type="button" id="btnModify" class="btn btn-primary btn-sm me-2" (click)="onModifyClick(review)">Modify</button>
+            <button type="button" id="btnDelete" class="btn btn-danger btn-sm me-2" (click)="onDeleteClick(review)">Delete</button>
             {{ review.restaurantName }}
-            <span class="badge bg-secondary" style="float: right">{{ review.rating }}</span>
+            @if (review.rating < 4){
+              <span class="badge bg-danger" style="float: right">{{ review.rating }}</span>
+            }
+            @else if (review.rating > 6){
+              <span class="badge bg-success" style="float: right">{{ review.rating }}</span>
+            }
+            @else {
+              <span class="badge bg-secondary" style="float: right">{{ review.rating }}</span>
+            }
           </li>
         } @empty {
           <h4>No reviews found</h4>
+          <span class="badge bg-">1--</span>
         }
       </ul>
     </div>
     <div class="card-footer">
-
     </div>
   </div>
 </div>

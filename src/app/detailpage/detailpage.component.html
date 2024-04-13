@@ -2,38 +2,31 @@
 <div class="m-4">
   <div class="card">
     <div class="card-header">
-      <h2>Modify A Review</h2>
+      <h2>Add A Review</h2>
     </div>
     <div class="card-body">
-      <form [formGroup]="reviewForm">
+      <form #reviewForm="ngForm">
         <div class="mb-3">
           <label for="txtRestaurantName">Restaurant Name</label>
-          <input id="txtRestaurantName" type="text" class="form-control" formControlName="restaurantName">
-
-          @if (isControlInvalid('restaurantName')){
-            <p style="color: red">{{getErrorMessage('restaurantName')}}</p>
-          }
+          <input id="txtRestaurantName" name="txtRestaurantName" type="text" class="form-control" [(ngModel)]="review.restaurantName" #restaurantName="ngModel">
+          <p *ngIf="nameError" class="text-danger">{{nameError}}</p>
         </div>
 
         <div class="mb-3">
           <label for="txtReviewComments">Review Comments</label>
-          <textarea id="txtReviewComments" class="form-control" formControlName="reviewComments"></textarea>
+          <textarea id="txtReviewComments" name="txtReviewComments" class="form-control" [(ngModel)]="review.reviewComments" #reviewComments="ngModel"></textarea>
         </div>
 
         <div class="mb-3">
           <label for="txtReviewDate">Review Date</label>
-          <input id="txtReviewDate" type="date" class="form-control" formControlName="reviewDate">
-          @if (isControlInvalid('reviewDate')){
-            <p style="color: red">{{getErrorMessage('reviewDate')}}</p>
-          }
+          <input id="txtReviewDate" name="txtReviewDate" type="date" class="form-control" [(ngModel)]="review.reviewDate" #reviewDate="ngModel" required>
+          <p *ngIf="dateError" class="text-danger">{{dateError}}</p>
         </div>
 
         <div class="mb-3">
           <label for="txtRating">Rating</label>
-          <input id="txtRating" type="number" class="form-control" formControlName="rating">
-          @if (isControlInvalid('rating')){
-            <p style="color: red">{{getErrorMessage('rating')}}</p>
-          }
+          <input id="txtRating" name="txtRating" type="number" class="form-control" [(ngModel)]="review.rating" #rating="ngModel" required min="1" max="10">
+          <p *ngIf="ratingError" class="text-danger">{{ratingError}}</p>
         </div>
 
         <div class="mb-3">
@@ -42,8 +35,7 @@
         </div>
 
         <button type="submit" id="btnUpdate" class="btn btn-primary" (click)="btnUpdateClick()">Update Review</button>
-        <button type="submit" id="btnCancel" class="btn btn-light btn-outline-dark m-1" (click)="btnCancelClick()">Cancel</button>
-        <button type="submit" id="btnDelete" class="btn btn-dark" (click)="btnDeleteClick()">Delete Review</button>
+        <button type="submit" id="btnCancel" class="btn btn-white btn-outline-primary m-1" (click)="btnCancelClick()">Cancel</button>
       </form>
     </div>
     <div class="card-footer">

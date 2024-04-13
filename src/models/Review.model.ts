@@ -2,8 +2,8 @@
   id: number | undefined;
   restaurantName: string = "";
   reviewComments: string = "";
-  reviewDate: Date = new Date();
-  rating: Number = 0;
+  reviewDate: Date = new Date("");
+  rating: number = 0;
   pictureUrl: string | null = null;
   lat: string = "";
   lon: string = "";
@@ -11,8 +11,8 @@
   constructor(
     restaurantName: string = "",
     reviewComments: string = "",
-    reviewDate: Date = new Date(),
-    rating: Number = 0,
+    reviewDate: Date = new Date(""),
+    rating: number = 0,
     pictureUrl: string | null = null,
     lat: string = "",
     lon: string = ""
