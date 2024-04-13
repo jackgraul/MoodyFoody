@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {NavComponent} from "./nav/nav.component";
+import {DatabaseService} from "../services/database.service";
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,9 @@ import {NavComponent} from "./nav/nav.component";
 })
 export class AppComponent {
   title = 'MoodyFoody';
+  database = inject(DatabaseService);
+
+  constructor() {
+    this.database.initDatabase();
+  }
 }

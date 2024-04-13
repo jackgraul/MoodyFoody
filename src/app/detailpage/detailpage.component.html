@@ -1,1 +1,53 @@
 <app-nav></app-nav>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Modify A Review</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="reviewForm">
+        <div class="mb-3">
+          <label for="txtRestaurantName">Restaurant Name</label>
+          <input id="txtRestaurantName" type="text" class="form-control" formControlName="restaurantName">
+
+          @if (isControlInvalid('restaurantName')){
+            <p style="color: red">{{getErrorMessage('restaurantName')}}</p>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtReviewComments">Review Comments</label>
+          <textarea id="txtReviewComments" class="form-control" formControlName="reviewComments"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="txtReviewDate">Review Date</label>
+          <input id="txtReviewDate" type="date" class="form-control" formControlName="reviewDate">
+          @if (isControlInvalid('reviewDate')){
+            <p style="color: red">{{getErrorMessage('reviewDate')}}</p>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="txtRating">Rating</label>
+          <input id="txtRating" type="number" class="form-control" formControlName="rating">
+          @if (isControlInvalid('rating')){
+            <p style="color: red">{{getErrorMessage('rating')}}</p>
+          }
+        </div>
+
+        <div class="mb-3">
+          <button type="button" id="newPicture" class="btn btn-primary" (click)="onNewPictureClick()">Take New Picture</button>
+          <button type="button" id="selectPicture" class="btn btn-secondary m-1" (click)="onSelectPictureClick()">Select Picture</button>
+        </div>
+
+        <button type="submit" id="btnUpdate" class="btn btn-primary" (click)="btnUpdateClick()">Update Review</button>
+        <button type="submit" id="btnCancel" class="btn btn-light btn-outline-dark m-1" (click)="btnCancelClick()">Cancel</button>
+        <button type="submit" id="btnDelete" class="btn btn-dark" (click)="btnDeleteClick()">Delete Review</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      Form values: {{ reviewForm.value | json }}
+    </div>
+  </div>
+</div>

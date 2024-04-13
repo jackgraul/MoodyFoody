@@ -1,1 +1,30 @@
 <app-nav></app-nav>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Reviews</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        @for (review of reviews;track $index) {
+          <li class="list-group-item">
+            <button type="button" id="btnModify" class="btn btn-primary btn-sm me-4" (click)="onModifyClick(review)">
+              Modify
+            </button>
+
+            <button type="button" id="btnDelete" class="btn btn-danger btn-sm me-4" (click)="onDeleteClick(review)">
+              Delete
+            </button>
+            {{ review.restaurantName }}
+            <span class="badge bg-secondary" style="float: right">{{ review.rating }}</span>
+          </li>
+        } @empty {
+          <h4>No reviews found</h4>
+        }
+      </ul>
+    </div>
+    <div class="card-footer">
+
+    </div>
+  </div>
+</div>

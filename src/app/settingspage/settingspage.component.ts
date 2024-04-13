@@ -12,4 +12,11 @@ import {NavComponent} from "../nav/nav.component";
 })
 export class SettingspageComponent {
 
+  btnUpdateAccountClick() {
+
+  }
+
+  btnDeleteAccountClick() {
+
+  }
 }

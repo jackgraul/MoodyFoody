@@ -2,16 +2,17 @@
 <div class="m-4">
   <div class="card">
     <div class="card-header">
-      <h2>Add a Review</h2>
+      <h2>Add A Review</h2>
     </div>
     <div class="card-body">
       <form [formGroup]="reviewForm" (ngSubmit)="onAddClick()">
         <div class="mb-3">
           <label for="txtRestaurantName">Restaurant Name</label>
           <input id="txtRestaurantName" type="text" class="form-control" formControlName="restaurantName">
-          <div *ngIf="isControlInvalid('restaurantName')">
-            {{ getErrorMessage('restaurantName') }}
-          </div>
+
+          @if (isControlInvalid('restaurantName')){
+            <p style="color: red">{{getErrorMessage('restaurantName')}}</p>
+          }
         </div>
 
         <div class="mb-3">
@@ -22,17 +23,17 @@
         <div class="mb-3">
           <label for="txtReviewDate">Review Date</label>
           <input id="txtReviewDate" type="date" class="form-control" formControlName="reviewDate">
-          <div *ngIf="isControlInvalid('reviewDate')">
-            {{ getErrorMessage('reviewDate') }}
-          </div>
+          @if (isControlInvalid('reviewDate')){
+            <p style="color: red">{{getErrorMessage('reviewDate')}}</p>
+          }
         </div>
 
         <div class="mb-3">
           <label for="txtRating">Rating</label>
           <input id="txtRating" type="number" class="form-control" formControlName="rating">
-          <div *ngIf="isControlInvalid('rating')">
-            {{ getErrorMessage('rating') }}
-          </div>
+          @if (isControlInvalid('rating')){
+            <p style="color: red">{{getErrorMessage('rating')}}</p>
+          }
         </div>
 
         <div class="mb-3">

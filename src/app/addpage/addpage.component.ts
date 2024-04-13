@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {JsonPipe} from "@angular/common";
 import {NavComponent} from "../nav/nav.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ReviewDalService} from "../../services/review-dal.service";
+import {Review} from "../../models/Review.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-addpage',
@@ -14,25 +17,34 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
   templateUrl: './addpage.component.html',
   styleUrl: './addpage.component.css'
 })
+
 export class AddpageComponent implements OnInit{
-  reviewForm!: FormGroup;  // Add the ! postfix to assert that the property will be defined
+  reviewForm!: FormGroup;
+  review: Review = new Review("McDonald's", "Bad", new Date("2024-01-01"), 4, null, "", "");
+  dal = inject(ReviewDalService)
+  router = inject(Router);
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.reviewForm = this.fb.group({
-      restaurantName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      reviewComments: [''],
-      reviewDate: ['', Validators.required],
-      rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]]
+      restaurantName: [this.review.restaurantName, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      reviewComments: [this.review.reviewComments],
+      reviewDate: [this.review.reviewDate.toISOString().split('T')[0], Validators.required],
+      rating: [this.review.rating, [Validators.required, Validators.min(1), Validators.max(10)]]
     });
   }
 
   onAddClick(): void {
     if (this.reviewForm.valid) {
-      console.log(this.reviewForm.value);
-      // Reset the form after successful submission
-      this.reviewForm.reset();
+      this.dal.insert(this.review).then((data) => {
+        console.log(data);
+        alert("Record added successfully");
+        this.reviewForm.reset();
+        this.router.navigate(["/show"]);
+      }).catch(e => {
+        console.log("error " + e.message)
+      })
     } else {
       this.validateAllFormFields(this.reviewForm);
     }
@@ -69,7 +81,7 @@ export class AddpageComponent implements OnInit{
   getErrorMessage(controlName: string): string {
     const control = this.reviewForm.get(controlName);
     if (control?.hasError('required')) {
-      return 'Required field';
+      return `${controlName} is a required field`;
     }
     if (control?.hasError('minlength')) {
       return 'Minimum length is 3';
@@ -78,7 +90,7 @@ export class AddpageComponent implements OnInit{
       return 'Maximum length is 20';
     }
     if (control?.hasError('min') || control?.hasError('max')) {
-      return 'Rating must be between 1 and 5';
+      return 'Rating must be between 1 and 10';
     }
     return '';
   }
