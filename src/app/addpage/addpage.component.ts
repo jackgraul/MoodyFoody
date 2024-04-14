@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ReviewDalService} from "../../services/review-dal.service";
 import {Review} from "../../models/Review.model";
 import {Router} from "@angular/router";
+import {CameraService} from "../../services/camera.service";
 
 @Component({
   selector: 'app-addpage',
@@ -22,8 +23,10 @@ import {Router} from "@angular/router";
 
 export class AddpageComponent {
   review: Review = new Review();
-  dal = inject(ReviewDalService)
+  imgsrc: any;
+  dal = inject(ReviewDalService);
   router = inject(Router);
+  cameraService = inject(CameraService);
   nameError: string = "";
   dateError: string = "";
   ratingError: string = "";
@@ -41,11 +44,19 @@ export class AddpageComponent {
   }
 
   onNewPictureClick(): void {
-    // Your new picture logic here
+    this.cameraService.capturePhoto().then((data)=>{
+      this.imgsrc = data;
+    }).catch((e)=>{
+      alert(e.toString());
+    });
   }
 
   onSelectPictureClick(): void {
-    // Your select picture logic here
+    this.cameraService.loadPhotoFromLibrary().then((data)=>{
+      this.imgsrc = data;
+    }).catch((e)=>{
+      alert(e.toString());
+    });
   }
 
   validateForm(review: Review) {

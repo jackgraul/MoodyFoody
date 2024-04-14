@@ -31,7 +31,8 @@
 
         <div class="mb-3">
           <button type="button" id="newPicture" class="btn btn-primary" (click)="onNewPictureClick()">Take New Picture</button>
-          <button type="button" id="selectPicture" class="btn btn-secondary m-1" (click)="onSelectPictureClick()">Select Picture</button>
+          <button type="button" id="selectPicture" class="btn btn-secondary m-1" (click)="onSelectPictureClick()">Select Picture</button><br>
+          <span><img [src]="imgsrc"  width="80%" alt="img placeholder"></span>
         </div>
 
         <button type="submit" id="btnAdd" class="btn btn-primary">Add Review</button>

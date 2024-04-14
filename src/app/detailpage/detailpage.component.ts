@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Review} from "../../models/Review.model";
 import {ReviewDalService} from "../../services/review-dal.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {CameraService} from "../../services/camera.service";
 
 @Component({
   selector: 'app-detailpage',
@@ -21,12 +22,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class DetailpageComponent implements OnInit{
   review: Review = new Review();
+  imgsrc: any;
   nameError: string = "";
   dateError: string = "";
   ratingError: string = "";
   dal = inject(ReviewDalService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
+  cameraService = inject(CameraService);
 
   ngOnInit(){
     const id: number = Number(this.activatedRoute.snapshot.paramMap.get("id"));
@@ -54,11 +57,19 @@ export class DetailpageComponent implements OnInit{
   }
 
   onNewPictureClick(): void {
-    // Your new picture logic here
+    this.cameraService.capturePhoto().then((data)=>{
+      this.imgsrc = data;
+    }).catch((e)=>{
+      alert(e.toString());
+    });
   }
 
   onSelectPictureClick(): void {
-    // Your select picture logic here
+    this.cameraService.loadPhotoFromLibrary().then((data)=>{
+      this.imgsrc = data;
+    }).catch((e)=>{
+      alert(e.toString());
+    });
   }
 
   validateForm(review: Review) {
