@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NavComponent} from "../nav/nav.component";
+import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
 import {JsonPipe, NgIf} from "@angular/common";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {NavComponent} from "../nav/nav.component";
 import {Review} from "../../models/Review.model";
 import {ReviewDalService} from "../../services/review-dal.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -14,20 +14,16 @@ declare const H: any;
   selector: 'app-detailpage',
   standalone: true,
   imports: [
-    NavComponent,
-    JsonPipe,
-    ReactiveFormsModule,
     FormsModule,
-    NgIf
+    JsonPipe,
+    NavComponent,
+    NgIf,
+    ReactiveFormsModule
   ],
   templateUrl: './detailpage.component.html',
   styleUrl: './detailpage.component.css'
 })
 export class DetailpageComponent implements OnInit{
-  review: Review = new Review();
-  imgsrc: any;
-  position: any;
-
   dal = inject(ReviewDalService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
@@ -35,10 +31,20 @@ export class DetailpageComponent implements OnInit{
   cameraService = inject(CameraService);
   geoService = inject(GeoService);
 
-  nameError: string = "";
-  dateError: string = "";
-  ratingError: string = "";
-  error: any;
+  isFormSubmitted: boolean = false;
+
+  review: any = {
+    restaurantName: '',
+    reviewComments: '',
+    reviewDate: null,
+    rating: null,
+    pictureUrl: '',
+    lat: '',
+    lon: ''
+  }
+
+  imgsrc: any;
+  position: any;
 
   ngOnInit(){
     const id: number = Number(this.activatedRoute.snapshot.paramMap.get("id"));
@@ -49,8 +55,8 @@ export class DetailpageComponent implements OnInit{
     });
   }
 
-  btnUpdateClick() {
-    if (this.validateForm(this.review)) {
+  btnUpdateClick(reviewForm: NgForm) {
+    if (reviewForm.valid) {
       this.dal.update(this.review).then((data) => {
         console.log(data);
         alert("Review updated successfully");
@@ -58,6 +64,35 @@ export class DetailpageComponent implements OnInit{
       }).catch(e => {
         console.log("error " + e.message)
       });
+
+      this.isFormSubmitted = true;
+
+      // Reset the form
+      reviewForm.resetForm();
+
+      // Reset the review object
+      this.review = {
+        restaurantName: '',
+        reviewComments: '',
+        reviewDate: null,
+        rating: null,
+        pictureUrl: '',
+        lat: '',
+        lon: ''
+      };
+
+    } else {
+      console.log('Form is invalid');
+      this.isFormSubmitted = true;
+      // Handle the form validation errors
+      for (const controlName in reviewForm.controls) {
+        if (reviewForm.controls.hasOwnProperty(controlName)) {
+          const control = reviewForm.controls[controlName];
+          if (control.invalid) {
+            console.log(`Control Name: ${controlName}, Errors: `, control.errors);
+          }
+        }
+      }
     }
   }
 
@@ -88,7 +123,7 @@ export class DetailpageComponent implements OnInit{
       this.review.lon = data.lon;
       this.showMap();
     }).catch((e)=>{
-      this.error = e;
+      alert(e);
       console.log(e);
     });
   }
@@ -126,62 +161,5 @@ export class DetailpageComponent implements OnInit{
 
     // Add the marker to the map and center the map at the location of the marker:
     map.addObject(marker);
-  }
-
-  validateForm(review: Review) {
-    let isValid = true;
-
-    if (this.validateDate(review.reviewDate) != "") {
-      this.dateError = this.validateDate(review.reviewDate);
-      isValid = false;
-    } else {
-      this.dateError = "";
-    }
-
-    if (this.validateName(review.restaurantName) != "") {
-      this.nameError = this.validateName(review.restaurantName);
-      isValid = false;
-    } else {
-      this.nameError = "";
-    }
-
-    if (this.validateRating(review.rating) != "") {
-      this.ratingError = this.validateRating(review.rating);
-      isValid = false;
-    } else {
-      this.ratingError = "";
-    }
-
-    return isValid;
-  }
-
-  validateName(name: string): string {
-    if (name == null || name == ""){
-      return "Restaurant Name is required";
-    }
-    else if (name.length < 3 || name.length > 20){
-      return "Restaurant Name must be between 3 & 20 characters";
-    }
-    else {
-      return "";
-    }
-  }
-
-  validateDate(date: Date): string {
-    if (date == null){
-      return "Review Date is required";
-    } else {
-      return "";
-    }
-  }
-
-  validateRating(rating: number):string {
-    if (rating == null){
-      return "Review Rating is required";
-    } else if (rating <= 0 || rating > 10){
-      return "Review Rating must be from 1-10";
-    } else {
-      return "";
-    }
   }
 }

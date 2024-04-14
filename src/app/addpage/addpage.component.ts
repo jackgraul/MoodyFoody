@@ -1,9 +1,9 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
 import {JsonPipe, NgIf} from "@angular/common";
 import {NavComponent} from "../nav/nav.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ReviewDalService} from "../../services/review-dal.service";
 import {Review} from "../../models/Review.model";
+import {ReviewDalService} from "../../services/review-dal.service";
 import {Router} from "@angular/router";
 import {CameraService} from "../../services/camera.service";
 import {GeoService} from "../../services/geo.service";
@@ -14,35 +14,41 @@ declare const H: any;
   selector: 'app-addpage',
   standalone: true,
   imports: [
+    FormsModule,
     JsonPipe,
     NavComponent,
-    ReactiveFormsModule,
-    FormsModule,
     NgIf,
+    ReactiveFormsModule
   ],
   templateUrl: './addpage.component.html',
   styleUrl: './addpage.component.css'
 })
-
 export class AddpageComponent {
-  review: Review = new Review();
-
-  imgsrc: any;
-  position: any;
-
   dal = inject(ReviewDalService);
   router = inject(Router);
 
   cameraService = inject(CameraService);
   geoService = inject(GeoService);
 
-  nameError: string = "";
-  dateError: string = "";
-  ratingError: string = "";
-  error: any;
+  isFormSubmitted: boolean = false;
 
-  btnAddClick(): void {
-    if (this.validateForm(this.review)){
+  review: any = {
+    restaurantName: '',
+    reviewComments: '',
+    reviewDate: null,
+    rating: null,
+    pictureUrl: '',
+    lat: '',
+    lon: ''
+  }
+
+  imgsrc: any;
+  position: any;
+
+  btnAddClick(reviewForm: NgForm){
+    if (reviewForm.valid) {
+      console.log('Form is valid:', this.review);
+
       this.dal.insert(this.review).then((data) => {
         console.log(data);
         alert("Review added successfully");
@@ -50,6 +56,35 @@ export class AddpageComponent {
       }).catch(e => {
         console.log("error " + e.message)
       });
+
+      this.isFormSubmitted = true;
+
+      // Reset the form
+      reviewForm.resetForm();
+
+      // Reset the review object
+      this.review = {
+        restaurantName: '',
+        reviewComments: '',
+        reviewDate: null,
+        rating: null,
+        pictureUrl: '',
+        lat: '',
+        lon: ''
+      };
+
+    } else {
+      console.log('Form is invalid');
+      this.isFormSubmitted = true;
+      // Handle the form validation errors
+      for (const controlName in reviewForm.controls) {
+        if (reviewForm.controls.hasOwnProperty(controlName)) {
+          const control = reviewForm.controls[controlName];
+          if (control.invalid) {
+            console.log(`Control Name: ${controlName}, Errors: `, control.errors);
+          }
+        }
+      }
     }
   }
 
@@ -76,7 +111,7 @@ export class AddpageComponent {
       this.review.lon = data.lon;
       this.showMap();
     }).catch((e)=>{
-      this.error = e;
+      alert(e);
       console.log(e);
     });
   }
@@ -114,62 +149,5 @@ export class AddpageComponent {
 
     // Add the marker to the map and center the map at the location of the marker:
     map.addObject(marker);
-  }
-
-  validateForm(review: Review) {
-    let isValid = true;
-
-    if (this.validateName(review.restaurantName) != "") {
-      this.nameError = this.validateName(review.restaurantName);
-      isValid = false;
-    } else {
-      this.nameError = "";
-    }
-
-    if (this.validateDate(review.reviewDate) != "") {
-      this.dateError = this.validateDate(review.reviewDate);
-      isValid = false;
-    } else {
-      this.dateError = "";
-    }
-
-    if (this.validateRating(review.rating) != "") {
-      this.ratingError = this.validateRating(review.rating);
-      isValid = false;
-    } else {
-      this.ratingError = "";
-    }
-
-    return isValid;
-  }
-
-  validateName(name: string): string {
-    if (name == null || name == ""){
-      return "Restaurant Name is required";
-    }
-    else if (name.length < 3 || name.length > 20){
-      return "Restaurant Name must be between 3 & 20 characters";
-    }
-    else {
-      return "";
-    }
-  }
-
-  validateDate(date: Date | null): string {
-    if (date === null || (date instanceof Object)) {
-      return "Review Date is required";
-    } else {
-      return "";
-    }
-  }
-
-  validateRating(rating: number): string {
-    if (rating == null){
-      return "Review Rating is required";
-    } else if (rating <= 0 || rating > 10){
-      return "Review Rating must be from 1-10";
-    } else {
-      return "";
-    }
   }
 }
