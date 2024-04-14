@@ -6,6 +6,9 @@ import {ReviewDalService} from "../../services/review-dal.service";
 import {Review} from "../../models/Review.model";
 import {Router} from "@angular/router";
 import {CameraService} from "../../services/camera.service";
+import {GeoService} from "../../services/geo.service";
+
+declare const H: any;
 
 @Component({
   selector: 'app-addpage',
@@ -23,13 +26,20 @@ import {CameraService} from "../../services/camera.service";
 
 export class AddpageComponent {
   review: Review = new Review();
+
   imgsrc: any;
+  position: any;
+
   dal = inject(ReviewDalService);
   router = inject(Router);
+
   cameraService = inject(CameraService);
+  geoService = inject(GeoService);
+
   nameError: string = "";
   dateError: string = "";
   ratingError: string = "";
+  error: any;
 
   btnAddClick(): void {
     if (this.validateForm(this.review)){
@@ -43,7 +53,7 @@ export class AddpageComponent {
     }
   }
 
-  onNewPictureClick(): void {
+  btnNewPictureClick(): void {
     this.cameraService.capturePhoto().then((data)=>{
       this.imgsrc = data;
     }).catch((e)=>{
@@ -51,12 +61,59 @@ export class AddpageComponent {
     });
   }
 
-  onSelectPictureClick(): void {
+  btnSelectPictureClick(): void {
     this.cameraService.loadPhotoFromLibrary().then((data)=>{
       this.imgsrc = data;
     }).catch((e)=>{
       alert(e.toString());
     });
+  }
+
+  btnGetLocationClick() {
+    this.geoService.getCurrentLocation().then((data)=>{
+      this.position = data;
+      this.review.lat = data.lat;
+      this.review.lon = data.lon;
+      this.showMap();
+    }).catch((e)=>{
+      this.error = e;
+      console.log(e);
+    });
+  }
+
+  public showMap() {
+    console.log("showing map: ")
+    document.getElementById('mapContainer')!.innerHTML = '';
+
+    // Initialize the platform object:
+    const platform = new H.service.Platform({
+      'apikey': 'aFq76cFW7BPopLU1ZyBExvtW8Jrn61YfF42n1htjK_g'
+    });
+
+    // Obtain the default map types from the platform object
+    const maptypes = platform.createDefaultLayers();
+
+    const options = {
+      zoom: 15,
+      center: {
+        lat: this.review.lat, lng: this.review.lon
+      }
+    };
+
+    // Instantiate (and display) a map object:
+    const map = new H.Map(
+      document.getElementById('mapContainer'),
+      maptypes.vector.normal.map,
+      options
+    );
+
+    const icon = new H.map.Icon('assets/img/circle-icon.png');
+    const marker = new H.map.Marker({
+      lat: this.review.lat, lng: this.review.lon
+    }, {icon: icon});
+
+    // Add the marker to the map and center the map at the location of the marker:
+    map.addObject(marker);
   }
 
   validateForm(review: Review) {

@@ -30,9 +30,19 @@
         </div>
 
         <div class="mb-3">
-          <button type="button" id="newPicture" class="btn btn-primary" (click)="onNewPictureClick()">Take New Picture</button>
-          <button type="button" id="selectPicture" class="btn btn-secondary m-1" (click)="onSelectPictureClick()">Select Picture</button><br>
-          <span><img [src]="imgsrc"  width="80%" alt="img placeholder"></span>
+          <button type="button" id="btnNewPicture" class="btn btn-primary" (click)="btnNewPictureClick()">Take New Picture</button>
+          <button type="button" id="btnSelectPicture" class="btn btn-secondary m-1" (click)="btnSelectPictureClick()">Select Picture</button><br>
+          <span><img [src]="imgsrc" width="80%" alt="img placeholder"></span>
+        </div>
+
+        <div class="mb-3">
+          <button type="button" id="btnGetLocation" class="btn btn-primary" (click)="btnGetLocationClick()">Get Location</button>
+          <br>
+          <label for="txtLat">Latitude</label>
+          <input id="txtLat" name="txtLat" type="text" class="form-control" [(ngModel)]="review.lat" #lat="ngModel" readonly>
+          <label for="txtLon">Longitude</label>
+          <input id="txtLon" name="txtLon" type="text" class="form-control" [(ngModel)]="review.lon" #lon="ngModel" readonly>
+          <div class="container" id="mapContainer" style="width: auto; height: 400px"></div>
         </div>
 
         <button type="submit" id="btnAdd" class="btn btn-primary">Add Review</button>
