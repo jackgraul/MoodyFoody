@@ -18,11 +18,12 @@ declare const H: any;
     JsonPipe,
     NavComponent,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './addpage.component.html',
   styleUrl: './addpage.component.css'
 })
+
 export class AddpageComponent {
   dal = inject(ReviewDalService);
   router = inject(Router);
@@ -88,19 +89,21 @@ export class AddpageComponent {
     }
   }
 
-  btnNewPictureClick(): void {
+  btnNewPictureClick() {
     this.cameraService.capturePhoto().then((data)=>{
       this.imgsrc = data;
     }).catch((e)=>{
       alert(e.toString());
+      console.log(e);
     });
   }
 
-  btnSelectPictureClick(): void {
+  btnSelectPictureClick() {
     this.cameraService.loadPhotoFromLibrary().then((data)=>{
       this.imgsrc = data;
     }).catch((e)=>{
       alert(e.toString());
+      console.log(e);
     });
   }
 
@@ -118,7 +121,10 @@ export class AddpageComponent {
 
   public showMap() {
     console.log("showing map: ")
-    document.getElementById('mapContainer')!.innerHTML = '';
+    const mapContainer = document.getElementById('mapContainer');
+    if (mapContainer) {
+      mapContainer.innerHTML = '';
+    }
 
     // Initialize the platform object:
     const platform = new H.service.Platform({

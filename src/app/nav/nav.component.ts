@@ -15,5 +15,6 @@ export class NavComponent {
 
   logoutClick() {
     localStorage.setItem("id", "");
+    alert('Logout successful');
   }
 }

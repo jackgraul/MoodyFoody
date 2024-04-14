@@ -1,5 +1,5 @@
 <app-nav></app-nav>
-<div class="m-4">
+<div class="m-1">
   <div class="card">
     <div class="card-header">
       <h2>Modify A Review</h2>
@@ -41,17 +41,21 @@
         <div class="mb-3">
           <button type="button" id="btnNewPicture" class="btn btn-primary" (click)="btnNewPictureClick()">Take New Picture</button>
           <button type="button" id="btnSelectPicture" class="btn btn-secondary m-1" (click)="btnSelectPictureClick()">Select Picture</button><br>
-          <span><img [src]="imgsrc" width="80%" alt="img placeholder"></span>
+          @if (imgsrc != null){
+            <span><img [src]="imgsrc" width="80%" alt="img placeholder"></span>
+          }
         </div>
 
         <div class="mb-3">
-          <button type="button" id="btnGetLocation" class="btn btn-primary" (click)="btnGetLocationClick()">Get Location</button>
+          <button type="button" id="btnGetLocation" class="btn btn-primary mb-2" (click)="btnGetLocationClick()">Get Location</button>
           <br>
-          <label for="txtLat">Latitude</label>
-          <input id="txtLat" name="txtLat" type="text" class="form-control" [(ngModel)]="review.lat" #lat="ngModel" readonly>
-          <label for="txtLon">Longitude</label>
-          <input id="txtLon" name="txtLon" type="text" class="form-control" [(ngModel)]="review.lon" #lon="ngModel" readonly>
-          <div class="container" id="mapContainer" style="width: auto; height: 400px"></div>
+          @if (review.lat != "" && review.lon != ""){
+            <label for="txtLat">Latitude</label>
+            <input id="txtLat" name="txtLat" type="text" class="form-control" [(ngModel)]="review.lat" #lat="ngModel" readonly>
+            <label for="txtLon">Longitude</label>
+            <input id="txtLon" name="txtLon" type="text" class="form-control" [(ngModel)]="review.lon" #lon="ngModel" readonly>
+            <div class="container" id="mapContainer" style="width: auto; height: 400px"></div>
+          }
         </div>
 
         <button type="submit" id="btnUpdate" class="btn btn-primary" (click)="btnUpdateClick(reviewForm)">Update Review</button>

@@ -18,7 +18,7 @@ declare const H: any;
     JsonPipe,
     NavComponent,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './detailpage.component.html',
   styleUrl: './detailpage.component.css'
@@ -129,7 +129,7 @@ export class DetailpageComponent implements OnInit{
   }
 
   public showMap() {
-    console.log("showing map: ")
+    console.log("showing map: ");
     document.getElementById('mapContainer')!.innerHTML = '';
 
     // Initialize the platform object:
