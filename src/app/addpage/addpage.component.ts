@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
-import {JsonPipe, NgIf} from "@angular/common";
+import {JsonPipe, NgIf, NgOptimizedImage} from "@angular/common";
 import {NavComponent} from "../nav/nav.component";
 import {Review} from "../../models/Review.model";
 import {ReviewDalService} from "../../services/review-dal.service";
@@ -19,6 +19,7 @@ declare const H: any;
     NavComponent,
     NgIf,
     ReactiveFormsModule,
+    NgOptimizedImage,
   ],
   templateUrl: './addpage.component.html',
   styleUrl: './addpage.component.css'
@@ -38,12 +39,12 @@ export class AddpageComponent {
     reviewComments: '',
     reviewDate: null,
     rating: null,
-    pictureUrl: '',
+    imgSrc: '',
     lat: '',
     lon: ''
   }
 
-  imgsrc: any;
+  imgSrc: any;
   position: any;
 
   btnAddClick(reviewForm: NgForm){
@@ -91,7 +92,7 @@ export class AddpageComponent {
 
   btnNewPictureClick() {
     this.cameraService.capturePhoto().then((data)=>{
-      this.imgsrc = data;
+      this.imgSrc = data;
     }).catch((e)=>{
       alert(e.toString());
       console.log(e);
@@ -100,7 +101,7 @@ export class AddpageComponent {
 
   btnSelectPictureClick() {
     this.cameraService.loadPhotoFromLibrary().then((data)=>{
-      this.imgsrc = data;
+      this.imgSrc = data;
     }).catch((e)=>{
       alert(e.toString());
       console.log(e);

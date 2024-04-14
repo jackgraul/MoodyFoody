@@ -4,7 +4,7 @@
   reviewComments: string = "";
   reviewDate: Date = new Date("");
   rating: number = 0;
-  pictureUrl: string | null = null;
+  imgSrc: string | null = null;
   lat: string = "";
   lon: string = "";
 
@@ -13,7 +13,7 @@
     reviewComments: string = "",
     reviewDate: Date = new Date(""),
     rating: number = 0,
-    pictureUrl: string | null = null,
+    imgSrc: string | null = null,
     lat: string = "",
     lon: string = ""
   ) {
@@ -21,7 +21,7 @@
     this.reviewComments = reviewComments;
     this.reviewDate = reviewDate;
     this.rating = rating;
-    this.pictureUrl = pictureUrl;
+    this.imgSrc = imgSrc;
     this.lat = lat;
     this.lon = lon;
   }

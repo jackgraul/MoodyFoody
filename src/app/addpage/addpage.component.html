@@ -41,8 +41,8 @@
         <div class="mb-3">
           <button type="button" id="btnNewPicture" class="btn btn-primary" (click)="btnNewPictureClick()">Take New Picture</button>
           <button type="button" id="btnSelectPicture" class="btn btn-secondary m-1" (click)="btnSelectPictureClick()">Select Picture</button><br>
-          @if (imgsrc != null){
-            <span><img [ngModel]="review.pictureUrl" #imgsrc="ngModel" [src]="imgsrc" width="80%" alt="img placeholder"></span>
+          @if (imgSrc != null){
+            <img [ngModel]="review.imgSrc" #imgSrc="ngModel" [src]="imgSrc" width="80%" alt="img placeholder">
           }
         </div>
 
