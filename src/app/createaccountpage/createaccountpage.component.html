@@ -1,1 +1,35 @@
-<p>createaccountpage works!</p>
+<div class="m-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Create Account</h2>
+    </div>
+    <div class="card-body">
+      <form #createForm = "ngForm">
+        <p *ngIf="emailErrorMessage" class="error-message">{{ emailErrorMessage }}</p>
+        <div class="mb-3">
+          <label for="txtCreateEmail">Email</label>
+          <input id="txtCreateEmail" type="text" class="form-control" name="txtCreateEmail"  [(ngModel)]="user.email" #email="ngModel">
+
+        </div>
+        <p *ngIf="passwordErrorMessage" class="error-message">{{ passwordErrorMessage }}</p>
+        <div class="mb-3">
+          <label for="txtCreatePassword">Password</label>
+          <input id="txtCreatePassword" type="password" class="form-control" name="txtCreatePassword"  [(ngModel)]="user.password" #password="ngModel">
+
+        </div>
+
+        <div class="mb-3">
+          <label for="txtVerifyPassword">Verify Password</label>
+          <input id="txtVerifyPassword" type="password" class="form-control" name="txtVerifyPassword" [(ngModel)]="user.verifyPassword" #verifyPassword="ngModel">
+
+        </div>
+
+        <button type="button" id="btnCreate" class="btn btn-primary" (click)="btnCreateClick()">Create</button><br>
+        <button type="button" id="btnCancelCreate" class="btn btn-light btn-outline-primary mt-1" (click)="btnCancelCreateClick()">Cancel</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      Form values: {{createForm.value | json}}
+    </div>
+  </div>
+</div>
