@@ -25,31 +25,20 @@ export class LoginpageComponent {
   errorMessage: string = "";
 
   btnLoginClick() {
-    if (this.validateLogin(this.user.email, this.user.password)) {
-      this.router.navigate(['/home']);
-      this.DAL.selectAll().then((data)=>{
-       alert("Login Successful");
-      }).catch((e)=>{
-       console.log("Error: error in finding login: " + e);
-      });
-    }
-    else{
-      if (!this.validateLogin(this.user.email, this.user.password)){
+    this.DAL.selectAll().then((users: User[]) => {
+      const foundUser = users.find(u => u.email === this.user.email && u.password === this.user.password);
+      if (foundUser) {
+        // @ts-ignore
+        localStorage.setItem("id", foundUser.id.toString());
+        this.router.navigate(['/home']);
+        alert("Login Successful");
+      } else {
         this.errorMessage = "Login is invalid";
       }
-      else{
-        this.errorMessage = "";
-      }
-    }
-  }
-
-  validateLogin(email: string, password: string): boolean {
-      if ((this.user.email === email) && (this.user.password === password)){
-        return true;
-      }
-      else{
-        return false;
-      }
+    }).catch((e) => {
+      console.log("Error: error in finding login: " + e);
+      this.errorMessage = "Error occurred while logging in";
+    });
   }
 
   btnCreateAccountClick() {
