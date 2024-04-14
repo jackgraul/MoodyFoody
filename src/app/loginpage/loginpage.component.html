@@ -4,20 +4,35 @@
       <h2>Login</h2>
     </div>
     <div class="card-body">
-      <form #loginForm="ngForm">
+      <form #loginForm="ngForm" (ngSubmit)="btnLoginClick(loginForm)">
         <div class="mb-3">
           <label for="txtEmail">Email</label>
-          <input id="txtEmail" type="text" class="form-control" name="txtEmail" [(ngModel)]="user.email" #email="ngModel">
-
+          <input id="txtEmail" type="text" class="form-control" name="txtEmail" [(ngModel)]="user.email" #email="ngModel" required>
+          <div *ngIf="(loginForm.invalid && isFormSubmitted) || (email.invalid && (email.dirty || email.touched))" class="text-danger">
+            <div *ngIf="email.errors?.['required']">Email is required.</div>
+          </div>
         </div>
 
         <div class="mb-3">
           <label for="txtPassword">Password</label>
-          <input id="txtPassword" type="text" class="form-control" name="txtPassword" [(ngModel)]="user.password" #password="ngModel">
-
+          <div class="input-group">
+            <input id="txtPassword" type="password" class="form-control" name="txtPassword" [(ngModel)]="user.password" #password="ngModel" required>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('txtPassword')">
+                <i class="fa" [ngClass]="{'fa-eye': passwordVisibility, 'fa-eye-slash': !passwordVisibility}"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="(loginForm.invalid && isFormSubmitted) || (password.invalid && (password.dirty || password.touched))" class="text-danger">
+            <div *ngIf="password.errors?.['required']">Password is required.</div>
+          </div>
         </div>
 
-        <button type="button" id="btnLogin" class="btn btn-primary" (click)="btnLoginClick()">Login</button><br>
+        <div *ngIf="isFormSubmitted && (email.value != null && password.value != null)" class="text-danger mb-2">
+          <div>{{errorMessage}}</div>
+        </div>
+
+        <button type="submit" id="btnLogin" class="btn btn-primary">Login</button><br>
         <button type="button" id="btnCreateAccount" class="btn btn-primary mt-1" (click)="btnCreateAccountClick()">Create Account</button>
       </form>
     </div>

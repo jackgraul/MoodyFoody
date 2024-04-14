@@ -42,7 +42,14 @@
 
         <div class="mb-3">
           <label for="txtPassword">Password</label>
-          <input id="txtPassword" type="password" class="form-control" name="txtPassword" [(ngModel)]="user.password" #password="ngModel" required minlength="6" >
+          <div class="input-group">
+            <input id="txtPassword" type="password" class="form-control" name="txtPassword" [(ngModel)]="user.password" #password="ngModel" required minlength="6" >
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('txtPassword')">
+                <i class="fa" [ngClass]="{'fa-eye': passwordVisibility, 'fa-eye-slash': !passwordVisibility}"></i>
+              </button>
+            </div>
+          </div>
           <div *ngIf="(userForm.invalid && isFormSubmitted) || (password.invalid && (password.dirty || password.touched))" class="text-danger">
             <div *ngIf="password.errors?.['required']">Password is required.</div>
             <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters long.</div>
@@ -51,11 +58,18 @@
 
         <div class="mb-3">
           <label for="txtVerifyPassword">Verify Password</label>
-          <input id="txtVerifyPassword" type="password" class="form-control" name="txtVerifyPassword" [(ngModel)]="user.verifyPassword" #verifyPassword="ngModel" required >
+          <div class="input-group">
+            <input id="txtVerifyPassword" type="password" class="form-control" name="txtVerifyPassword" [(ngModel)]="user.verifyPassword" #verifyPassword="ngModel" required >
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" (click)="toggleVerifyPasswordVisibility('txtVerifyPassword')">
+                <i class="fa" [ngClass]="{'fa-eye': passwordVisibility, 'fa-eye-slash': !passwordVisibility}"></i>
+              </button>
+            </div>
+          </div>
           <div *ngIf="(userForm.invalid && isFormSubmitted) || (verifyPassword.invalid && (verifyPassword.dirty || verifyPassword.touched))" class="text-danger">
             <div *ngIf="verifyPassword.errors?.['required']">Verify password is required.</div>
           </div>
-          <div *ngIf="(userForm.invalid && isFormSubmitted && password.touched || verifyPassword.touched) && !validatePassword(user.password, user.verifyPassword)" class="text-danger">
+          <div *ngIf="(userForm.invalid && isFormSubmitted || password.touched && verifyPassword.touched) && !validatePassword(user.password, user.verifyPassword)" class="text-danger">
             <div>Passwords do not match</div>
           </div>
         </div>

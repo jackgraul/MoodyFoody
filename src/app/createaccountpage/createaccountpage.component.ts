@@ -22,9 +22,11 @@ import {NavComponent} from "../nav/nav.component";
 })
 export class CreateaccountpageComponent {
   router = inject(Router)
-  DAL = inject(UserDalService);
+  dal = inject(UserDalService);
 
   isFormSubmitted: boolean = false;
+  passwordVisibility: boolean = false;
+  verifyPasswordVisibility: boolean = false;
 
   user: any = {
     firstName: '',
@@ -35,11 +37,11 @@ export class CreateaccountpageComponent {
     verifyPassword: ''
   }
 
-  btnCreateClick(createForm: NgForm) {
-    if (createForm.valid){
-      this.router.navigate(['/home']);
-      this.DAL.insert(this.user).then((data)=>{
-        alert("User added successfully");
+  btnCreateClick(userForm: NgForm) {
+    if (userForm.valid){
+      this.router.navigate(['/login']);
+      this.dal.insert(this.user).then((data)=>{
+        alert("User created successfully");
       }).catch((e)=>{
         console.log("Error: error in add button click: " + e);
       });
@@ -49,9 +51,9 @@ export class CreateaccountpageComponent {
       console.log('Form is invalid');
       this.isFormSubmitted = true;
       // Handle the form validation errors
-      for (const controlName in createForm.controls) {
-        if (createForm.controls.hasOwnProperty(controlName)) {
-          const control = createForm.controls[controlName];
+      for (const controlName in userForm.controls) {
+        if (userForm.controls.hasOwnProperty(controlName)) {
+          const control = userForm.controls[controlName];
           if (control.invalid) {
             console.log(`Control Name: ${controlName}, Errors: `, control.errors);
           }
@@ -70,6 +72,28 @@ export class CreateaccountpageComponent {
     }
     else{
       return false;
+    }
+  }
+
+  togglePasswordVisibility(inputFieldId: string) {
+    const inputField = document.getElementById(inputFieldId) as HTMLInputElement;
+    if (inputField.type === "password") {
+      inputField.type = "text";
+      this.passwordVisibility = true;
+    } else {
+      inputField.type = "password";
+      this.passwordVisibility = false;
+    }
+  }
+
+  toggleVerifyPasswordVisibility(inputFieldId: string) {
+    const inputField = document.getElementById(inputFieldId) as HTMLInputElement;
+    if (inputField.type === "password") {
+      inputField.type = "text";
+      this.verifyPasswordVisibility = true;
+    } else {
+      inputField.type = "password";
+      this.verifyPasswordVisibility = false;
     }
   }
 }

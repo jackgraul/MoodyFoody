@@ -12,4 +12,8 @@ import {RouterLink} from "@angular/router";
 })
 export class NavComponent {
   title: string = "MoodyFoody";
+
+  logoutClick() {
+    localStorage.setItem("id", "");
+  }
 }
