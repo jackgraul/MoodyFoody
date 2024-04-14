@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
 import {JsonPipe} from "@angular/common";
 import {User} from "../../models/User.model";
 import {Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {UserDalService} from "../../services/user-dal.service";
+import {NavComponent} from "../nav/nav.component";
 
 @Component({
   selector: 'app-createaccountpage',
@@ -13,52 +14,57 @@ import {UserDalService} from "../../services/user-dal.service";
     FormsModule,
     JsonPipe,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    NavComponent
   ],
   templateUrl: './createaccountpage.component.html',
   styleUrl: './createaccountpage.component.css'
 })
 export class CreateaccountpageComponent {
-  user: User = new User("", "", new Date(""), "", "");
-  emailErrorMessage: string = '';
-  passwordErrorMessage: string = '';
   router = inject(Router)
   DAL = inject(UserDalService);
-  btnCreateClick() {
 
-    if (this.validateEmail(this.user.email) && (this.validatePassword(this.user.password, this.user.verifyPassword))) {
+  isFormSubmitted: boolean = false;
+
+  user: any = {
+    firstName: '',
+    lastName: '',
+    dob: null,
+    email: '',
+    password: '',
+    verifyPassword: ''
+  }
+
+  btnCreateClick(createForm: NgForm) {
+    if (createForm.valid){
       this.router.navigate(['/home']);
       this.DAL.insert(this.user).then((data)=>{
         alert("User added successfully");
       }).catch((e)=>{
         console.log("Error: error in add button click: " + e);
-      })
+      });
 
-    }
-    else{
-      if(!this.validateEmail(this.user.email)){
-        this.emailErrorMessage = "Email is invalid";
-      }
-      else{
-        this.emailErrorMessage = "";
-      }
-
-      if(!this.validatePassword(this.user.password, this.user.verifyPassword)){
-        this.passwordErrorMessage = "Passwords do not match";
-      }
-      else{
-        this.passwordErrorMessage = "";
+      this.isFormSubmitted = true;
+    } else {
+      console.log('Form is invalid');
+      this.isFormSubmitted = true;
+      // Handle the form validation errors
+      for (const controlName in createForm.controls) {
+        if (createForm.controls.hasOwnProperty(controlName)) {
+          const control = createForm.controls[controlName];
+          if (control.invalid) {
+            console.log(`Control Name: ${controlName}, Errors: `, control.errors);
+          }
+        }
       }
     }
-
   }
 
-  private validateEmail(email: string): boolean {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
+  btnCancelClick() {
+    this.router.navigate(['/login']);
   }
 
-  private validatePassword(password: string, verifyPassword: string): boolean {
+  validatePassword(password: string, verifyPassword: string): boolean {
     if (password === verifyPassword){
       return true;
     }
@@ -66,9 +72,4 @@ export class CreateaccountpageComponent {
       return false;
     }
   }
-
-  btnCancelCreateClick() {
-    this.router.navigate(['/login']);
-  }
-
 }
