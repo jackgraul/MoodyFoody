@@ -37,7 +37,7 @@ export class CreateaccountpageComponent {
 
   btnCreateClick(createForm: NgForm) {
     if (createForm.valid){
-      this.router.navigate(['/home']);
+      this.router.navigate(['/login']);
       this.DAL.insert(this.user).then((data)=>{
         alert("User added successfully");
       }).catch((e)=>{
