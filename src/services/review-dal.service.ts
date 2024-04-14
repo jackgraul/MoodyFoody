@@ -123,7 +123,7 @@ export class ReviewDalService {
       const reqUpdate = reviewsStore.put(review);
 
       reqUpdate.onsuccess = (event: any) => {
-        console.log(`Success: data updated successfully: ${event}`);
+        console.log(`Success: review updated successfully: ${event}`);
         resolve(event);
       };
 

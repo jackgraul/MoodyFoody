@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NavComponent} from "../nav/nav.component";
+import {Router} from "@angular/router";
+import {User} from "../../models/User.model";
 
 @Component({
   selector: 'app-settingspage',
@@ -11,12 +13,17 @@ import {NavComponent} from "../nav/nav.component";
   styleUrl: './settingspage.component.css'
 })
 export class SettingspageComponent {
+  router = inject(Router);
 
-  btnUpdateAccountClick() {
+  // btnUpdateAccountClick(user: User) {
+  //   this.router.navigate([`/update/${user.id}`])
+  // }
+
+  btnDeleteAccountClick() {
 
   }
 
-  btnDeleteAccountClick() {
+  btnUpdateAccountClick() {
 
   }
 }
