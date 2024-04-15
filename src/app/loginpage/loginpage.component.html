@@ -7,9 +7,10 @@
       <form #loginForm="ngForm" (ngSubmit)="btnLoginClick(loginForm)">
         <div class="mb-3">
           <label for="txtEmail">Email</label>
-          <input id="txtEmail" type="text" class="form-control" name="txtEmail" [(ngModel)]="user.email" #email="ngModel" required>
+          <input id="txtEmail" type="text" class="form-control" name="txtEmail" [(ngModel)]="user.email" #email="ngModel" required email>
           <div *ngIf="(loginForm.invalid && isFormSubmitted) || (email.invalid && (email.dirty || email.touched))" class="text-danger">
             <div *ngIf="email.errors?.['required']">Email is required.</div>
+            <div *ngIf="email.errors?.['email']">Invalid email.</div>
           </div>
         </div>
 
