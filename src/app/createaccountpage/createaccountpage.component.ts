@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
-import {JsonPipe} from "@angular/common";
-import {User} from "../../models/User.model";
-import {Router} from "@angular/router";
-import {CommonModule} from "@angular/common";
-import {UserDalService} from "../../services/user-dal.service";
-import {NavComponent} from "../nav/nav.component";
+import { FormsModule, NgForm, ReactiveFormsModule } from "@angular/forms";
+import { JsonPipe } from "@angular/common";
+import { User } from "../../models/User.model";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { UserDalService } from "../../services/user-dal.service";
+import { NavComponent } from "../nav/nav.component";
 
 @Component({
   selector: 'app-createaccountpage',
@@ -27,6 +27,7 @@ export class CreateaccountpageComponent {
   isFormSubmitted: boolean = false;
   passwordVisibility: boolean = false;
   verifyPasswordVisibility: boolean = false;
+  emailExists: string = '';
 
   user: any = {
     firstName: '',
@@ -37,16 +38,37 @@ export class CreateaccountpageComponent {
     verifyPassword: ''
   }
 
-  btnCreateClick(userForm: NgForm) {
-    if (userForm.valid){
-      this.router.navigate(['/login']);
-      this.dal.insert(this.user).then((data)=>{
-        alert("User created successfully");
-      }).catch((e)=>{
-        console.log("Error: error in add button click: " + e);
-      });
+  ngOnInit() {
+    this.checkUserEmailExistence();
+  }
 
+  async checkUserEmailExistence(): Promise<void> {
+    try {
+      const users = await this.dal.selectAll();
+      const userEmails = users.map((user: User) => user.email);
+
+      if (userEmails.includes(this.user.email)) {
+        this.emailExists = 'Email already exists. Please use a different email.';
+      }
+    } catch (error) {
+      console.log('Error checking user email existence:', error);
+    }
+  }
+
+  btnCreateClick(userForm: NgForm) {
+    if (userForm.valid) {
       this.isFormSubmitted = true;
+      if (!this.checkUserEmailExistence()) {
+        this.router.navigate(['/login']);
+        this.dal.insert(this.user).then((data) => {
+          alert("User created successfully");
+        }).catch((e) => {
+          console.log("Error: error in add button click: " + e);
+        });
+      } else {
+        this.emailExists = 'Email already exists. Please use a different email.';
+        //alert('Email already exists. Please use a different email.');
+      }
     } else {
       console.log('Form is invalid');
       this.isFormSubmitted = true;
@@ -67,10 +89,10 @@ export class CreateaccountpageComponent {
   }
 
   validatePassword(password: string, verifyPassword: string): boolean {
-    if (password === verifyPassword){
+    if (password === verifyPassword) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }

@@ -38,6 +38,9 @@
             <div *ngIf="email.errors?.['required']">Email is required.</div>
             <div *ngIf="email.errors?.['email']">Email is invalid.</div>
           </div>
+          <div *ngIf="isFormSubmitted && emailExists != ''" class="text-danger">
+            <div>{{emailExists}}</div>
+          </div>
         </div>
 
         <div class="mb-3">
@@ -79,7 +82,7 @@
       </form>
     </div>
     <div class="card-footer">
-      Form values: {{ userForm.value | json }}
+      <!--Form values: {{ userForm.value | json }}-->
     </div>
   </div>
 </div>
