@@ -38,7 +38,7 @@ export class DetailpageComponent implements OnInit{
     reviewComments: '',
     reviewDate: null,
     rating: null,
-    pictureUrl: '',
+    imgSrc: '',
     lat: '',
     lon: ''
   }
@@ -61,26 +61,11 @@ export class DetailpageComponent implements OnInit{
         console.log(data);
         alert("Review updated successfully");
         this.router.navigate(["/show"]);
+        this.isFormSubmitted = true;
+        reviewForm.resetForm();
       }).catch(e => {
         console.log("error " + e.message)
       });
-
-      this.isFormSubmitted = true;
-
-      // Reset the form
-      reviewForm.resetForm();
-
-      // Reset the review object
-      this.review = {
-        restaurantName: '',
-        reviewComments: '',
-        reviewDate: null,
-        rating: null,
-        pictureUrl: '',
-        lat: '',
-        lon: ''
-      };
-
     } else {
       console.log('Form is invalid');
       this.isFormSubmitted = true;
@@ -100,19 +85,25 @@ export class DetailpageComponent implements OnInit{
     this.router.navigate(["/show"]);
   }
 
-  btnNewPictureClick(): void {
+  btnNewPictureClick() {
     this.cameraService.capturePhoto().then((data)=>{
       this.imgsrc = data;
+      this.review.imgSrc = this.imgsrc;
+      console.log(this.review.imgSrc);
     }).catch((e)=>{
       alert(e.toString());
+      console.log(e);
     });
   }
 
-  btnSelectPictureClick(): void {
+  btnSelectPictureClick() {
     this.cameraService.loadPhotoFromLibrary().then((data)=>{
       this.imgsrc = data;
+      this.review.imgSrc = this.imgsrc;
+      console.log(this.review.imgSrc);
     }).catch((e)=>{
       alert(e.toString());
+      console.log(e);
     });
   }
 
@@ -123,7 +114,6 @@ export class DetailpageComponent implements OnInit{
       this.review.lon = data.lon;
       this.showMap();
     }).catch((e)=>{
-      alert(e);
       console.log(e);
     });
   }

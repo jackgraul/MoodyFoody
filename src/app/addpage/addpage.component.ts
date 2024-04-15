@@ -44,7 +44,7 @@ export class AddpageComponent {
     lon: ''
   }
 
-  imgSrc: any;
+  imgsrc: any;
   position: any;
 
   btnAddClick(reviewForm: NgForm){
@@ -55,26 +55,11 @@ export class AddpageComponent {
         console.log(data);
         alert("Review added successfully");
         this.router.navigate(["/show"]);
+        this.isFormSubmitted = true;
+        reviewForm.resetForm();
       }).catch(e => {
         console.log("error " + e.message)
       });
-
-      this.isFormSubmitted = true;
-
-      // Reset the form
-      reviewForm.resetForm();
-
-      // Reset the review object
-      this.review = {
-        restaurantName: '',
-        reviewComments: '',
-        reviewDate: null,
-        rating: null,
-        pictureUrl: '',
-        lat: '',
-        lon: ''
-      };
-
     } else {
       console.log('Form is invalid');
       this.isFormSubmitted = true;
@@ -92,7 +77,9 @@ export class AddpageComponent {
 
   btnNewPictureClick() {
     this.cameraService.capturePhoto().then((data)=>{
-      this.imgSrc = data;
+      this.imgsrc = data;
+      this.review.imgSrc = this.imgsrc;
+      console.log(this.review.imgSrc);
     }).catch((e)=>{
       alert(e.toString());
       console.log(e);
@@ -101,7 +88,9 @@ export class AddpageComponent {
 
   btnSelectPictureClick() {
     this.cameraService.loadPhotoFromLibrary().then((data)=>{
-      this.imgSrc = data;
+      this.imgsrc = data;
+      this.review.imgSrc = this.imgsrc;
+      console.log(this.review.imgSrc);
     }).catch((e)=>{
       alert(e.toString());
       console.log(e);
@@ -115,7 +104,6 @@ export class AddpageComponent {
       this.review.lon = data.lon;
       this.showMap();
     }).catch((e)=>{
-      alert(e);
       console.log(e);
     });
   }

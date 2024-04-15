@@ -41,8 +41,9 @@
         <div class="mb-3">
           <button type="button" id="btnNewPicture" class="btn btn-primary" (click)="btnNewPictureClick()">Take New Picture</button>
           <button type="button" id="btnSelectPicture" class="btn btn-secondary m-1" (click)="btnSelectPictureClick()">Select Picture</button><br>
-          @if (imgSrc != null){
-            <img [ngModel]="review.imgSrc" #imgSrc="ngModel" [src]="imgSrc" width="80%" alt="img placeholder">
+          @if (review.imgSrc != ''){
+            <img [src]="imgsrc" width="80%" alt="img placeholder">
+            <input id="txtImgSrc" name="txtImgSrc" [(ngModel)]="review.imgSrc" #imgSrc="ngModel" hidden>
           }
         </div>
 
@@ -62,7 +63,7 @@
       </form>
     </div>
     <div class="card-footer">
-      Form values: {{ reviewForm.value | json }}
+      <!--Form values: {{ reviewForm.value | json }}-->
     </div>
   </div>
 </div>
